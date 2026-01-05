@@ -1,21 +1,45 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('./database');
+const mongoose = require('mongoose');
 
-// Tabelul pentru Activități
-const Activity = sequelize.define('Activity', {
-    nume: { type: DataTypes.STRING, allowNull: false },
-    descriere: { type: DataTypes.TEXT },
-    codAcces: { type: DataTypes.STRING, unique: true, allowNull: false },
-    durata: { type: DataTypes.INTEGER }, 
-    dataInceput: { type: DataTypes.DATE, allowNull: false } 
-});
+// --- Schema pentru Activități ---
+const ActivitySchema = new mongoose.Schema({
+    nume: { 
+        type: String, 
+        required: true 
+    },
+    descriere: { 
+        type: String 
+    },
+    codAcces: { 
+        type: String, 
+        required: true, 
+        unique: true 
+    },
+    durata: { 
+        type: Number 
+    }, 
+    dataInceput: { 
+        type: Date, 
+        required: true 
+    }
+}, { timestamps: true }); 
 
-// Tabelul pentru Feedback
-const Feedback = sequelize.define('Feedback', {
-    emoticon: { type: DataTypes.STRING, allowNull: false }
-});
-//o activitate are mai multe feedback-uri
-Activity.hasMany(Feedback);
-Feedback.belongsTo(Activity);
+// --- Schema pentru Feedback ---
+const FeedbackSchema = new mongoose.Schema({
+    emoticon: { 
+        type: String, 
+        required: true 
+    },
 
-module.exports = { Activity, Feedback, sequelize };
+    ActivityId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Activity',
+        required: true
+    }
+}, { timestamps: true });
+
+// Crearea modelelor
+const Activity = mongoose.model('Activity', ActivitySchema);
+const Feedback = mongoose.model('Feedback', FeedbackSchema);
+
+// Exportăm modelele 
+module.exports = { Activity, Feedback };

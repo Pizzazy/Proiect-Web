@@ -90,7 +90,7 @@ const Admin = () => {
             <h3>Activitati Existente</h3>
             <ul>
                 {activitati.map((act) => (
-                    <li key={act.id} style={{ marginBottom: '10px' }}>
+                    <li key={act._id} style={{ marginBottom: '10px' }}>
                         <strong>{act.nume}</strong> (Cod: {act.codAcces})
                         <br />
                         <small>
@@ -100,7 +100,8 @@ const Admin = () => {
                             Durata: {act.durata} minute
                         </small>
                         <br />
-                        <button onClick={() => viewFeedback(act.id)} style={{ marginTop: '5px' }}>
+                        {/* 2. Modifică aici: viewFeedback(act._id) */}
+                        <button onClick={() => viewFeedback(act._id)} style={{ marginTop: '5px' }}>
                             Vezi Feedback
                         </button>
                     </li>
@@ -110,7 +111,7 @@ const Admin = () => {
             {/* DASHBOARD FEEDBACK */}
             {idActivitateCurenta && (
                 <div style={{ marginTop: '30px', padding: '20px', border: '2px solid #007bff', borderRadius: '10px' }}>
-                    <h3>Rezultate Feedback (ID: {idActivitateCurenta})</h3>
+                    <h3>Rezultate Feedback</h3>
 
                     <div style={{ display: 'flex', justifyContent: 'space-around', fontSize: '1.8rem', marginBottom: '20px' }}>
                         <div>😊 {feedbackSelectat.filter((f) => f.emoticon === 'smiley').length}</div>
