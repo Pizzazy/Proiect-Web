@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Admin = () => {
+    const API_URL = "https://proiect-feedback-continuu-c2b9.onrender.com";
+
     const [nume, setNume] = useState('');
     const [descriere, setDescriere] = useState('');
     const [codAcces, setCodAcces] = useState('');
@@ -14,7 +16,7 @@ const Admin = () => {
 
     const loadActivities = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/activities');
+            const res = await axios.get(`${API_URL}/activities`);
             setActivitati(res.data);
         } catch (error) {
             console.error('Nu am putut incarca activitatile');
@@ -24,7 +26,7 @@ const Admin = () => {
     const handleCreate = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/activities', {
+            await axios.post(`${API_URL}/activities`, {
                 nume,
                 descriere,
                 codAcces,
@@ -41,7 +43,7 @@ const Admin = () => {
     const viewFeedback = async (id) => {
         setIdActivitateCurenta(id);
         try {
-            const res = await axios.get(`http://localhost:5000/activities/${id}/feedbacks`);
+            const res = await axios.get(`${API_URL}/activities/${id}/feedbacks`);
             setFeedbackSelectat(res.data);
         } catch (error) {
             console.error('Eroare la incarcarea feedback-ului');
@@ -100,7 +102,6 @@ const Admin = () => {
                             Durata: {act.durata} minute
                         </small>
                         <br />
-                        {/* 2. Modifică aici: viewFeedback(act._id) */}
                         <button onClick={() => viewFeedback(act._id)} style={{ marginTop: '5px' }}>
                             Vezi Feedback
                         </button>

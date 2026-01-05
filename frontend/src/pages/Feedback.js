@@ -5,7 +5,7 @@ import axios from 'axios';
 const Feedback = () => {
     const { id } = useParams(); 
 
-    const API_URL = "http://localhost:5000";
+    const API_URL = "https://proiect-feedback-continuu-c2b9.onrender.com";
 
     const sendFeedback = async (type) => {
         try {

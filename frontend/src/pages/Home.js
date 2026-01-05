@@ -6,15 +6,14 @@ const Home = () => {
     const [code, setCode] = useState(''); 
     const navigate = useNavigate();
 
-    // SCHIMBĂ ACEST LINK după ce primești adresa de la Render
-    const API_URL = "http://localhost:5000";
+
+    const API_URL = "https://proiect-feedback-continuu-c2b9.onrender.com";
 
     const handleJoin = async () => {
         try {
-            // Căutăm activitatea după codul introdus
+
             const response = await axios.get(`${API_URL}/activities/${code}`);
-            
-            // Folosim ._id pentru MongoDB
+
             navigate(`/feedback/${response.data._id}`);
             
         } catch (error) {
