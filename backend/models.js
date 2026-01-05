@@ -6,15 +6,14 @@ const Activity = sequelize.define('Activity', {
     nume: { type: DataTypes.STRING, allowNull: false },
     descriere: { type: DataTypes.TEXT },
     codAcces: { type: DataTypes.STRING, unique: true, allowNull: false },
-    durata: { type: DataTypes.INTEGER } // în minute
+    durata: { type: DataTypes.INTEGER }, 
+    dataInceput: { type: DataTypes.DATE, allowNull: false } 
 });
 
 // Tabelul pentru Feedback
 const Feedback = sequelize.define('Feedback', {
-    emoticon: { type: DataTypes.STRING, allowNull: false }, // smiley, frowny, etc.
-    timestamp: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
+    emoticon: { type: DataTypes.STRING, allowNull: false }
 });
-
 //o activitate are mai multe feedback-uri
 Activity.hasMany(Feedback);
 Feedback.belongsTo(Activity);

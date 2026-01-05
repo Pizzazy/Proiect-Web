@@ -13,8 +13,8 @@ const PORT = process.env.PORT || 5000;
 // 1. CREARE ACTIVITATE 
 app.post('/activities', async (req, res) => {
     try {
-        const { nume, descriere, codAcces, durata } = req.body;
-        const nouaActivitate = await Activity.create({ nume, descriere, codAcces, durata });
+        const { nume, descriere, codAcces, durata, dataInceput } = req.body;
+        const nouaActivitate = await Activity.create({ nume, descriere, codAcces, durata, dataInceput });
         res.status(201).json(nouaActivitate);
     } catch (error) {
         res.status(500).json({ message: "Eroare la creare", error: error.message });
@@ -27,7 +27,7 @@ app.get('/activities', async (req, res) => {
         const activitati = await Activity.findAll();
         res.json(activitati);
     } catch (error) {
-        res.status(500).json({ message: "Eroare la preluare" });
+        res.status(500).json({ message: "Eroare la preluare activitati", error: error.message });
     }
 });
 
@@ -37,16 +37,33 @@ app.get('/activities/:cod', async (req, res) => {
         const codCautat = req.params.cod;
         const activitate = await Activity.findOne({ where: { codAcces: codCautat } });
 
-        if (activitate) {
-            res.json(activitate);
-        } else {
-            res.status(404).json({ message: "Activitatea nu a fost gasita!" });
+        if (!activitate) {
+            return res.status(404).json({ message: "Cod gresit!" });
         }
+
+        if (!activitate.dataInceput) {
+            return res.status(403).json({ message: "Această activitate nu are o oră de start setată!" });
+        }
+
+        const acum = new Date();
+        const inceput = new Date(activitate.dataInceput);
+        const sfarsit = new Date(inceput.getTime() + activitate.durata * 60000);
+
+        if (acum < inceput) {
+            return res.status(403).json({ 
+                message: `Activitatea va începe la ${inceput.toLocaleDateString()} ${inceput.toLocaleTimeString()}` 
+            });
+        }
+
+        if (acum > sfarsit) {
+            return res.status(403).json({ message: "Activitatea s-a încheiat deja!" });
+        }
+
+        res.json(activitate);
     } catch (error) {
         res.status(500).json({ message: "Eroare la cautare", error: error.message });
     }
 });
-
 
 // 4. TRIMITE FEEDBACK 
 app.post('/feedbacks', async (req, res) => {

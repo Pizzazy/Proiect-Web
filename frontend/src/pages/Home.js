@@ -7,13 +7,17 @@ const Home = () => {
     const navigate = useNavigate();
 
     const handleJoin = async () => {
-        try {
-            const response = await axios.get(`http://localhost:5000/activities/${code}`);
-            navigate(`/feedback/${response.data.id}`);
-        } catch (error) {
-            alert("Codul este greșit sau activitatea nu există!");
+    try {
+        const response = await axios.get(`http://localhost:5000/activities/${code}`);
+        navigate(`/feedback/${response.data.id}`);
+    } catch (error) {
+        if (error.response && error.response.data) {
+            alert(error.response.data.message);
+        } else {
+            alert("Eroare la conectare!");
         }
-    };
+    }
+};
 
     return (
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
